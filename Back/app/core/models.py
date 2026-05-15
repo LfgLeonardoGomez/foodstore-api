@@ -1,5 +1,8 @@
+from datetime import datetime
 from typing import Optional
 from sqlmodel import Field, SQLModel
+
+from app.core.audit import AuditMixin
 
 class ProductoCategoria(SQLModel, table=True):
     """Tabla intermedia para la relación muchos a muchos entre Productos y Categorías"""
@@ -15,3 +18,12 @@ class ProductoIngrediente(SQLModel, table=True):
     
     producto_id: int = Field(foreign_key="productos.id", primary_key=True)
     ingrediente_id: int = Field(foreign_key="ingredientes.id", primary_key=True)
+
+
+class UsuarioRol(AuditMixin, SQLModel, table=True):
+    __tablename__ = "usuario_rol"
+    usuario_id : int = Field (foreign_key="usuario.id", primary_key=True)
+    rol_codigo : str = Field (foreign_key="rol.codigo", primary_key=True)
+    asignado_por_id : int = Field(foreign_key="usuario.id", nullable=True)
+    expires_at : datetime = Field (nullable=False)
+    

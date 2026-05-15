@@ -3,6 +3,7 @@ from app.core.database import get_engine
 from app.categoria.repository import CategoriaRepository
 from app.ingrediente.repository import IngredienteRepository
 from app.producto.repository import ProductoRepository
+from app.usuarios.repository import UsuarioRepository
 
 class UnitOfWork:
     def __init__(self):
@@ -13,6 +14,7 @@ class UnitOfWork:
         self.categorias = CategoriaRepository(self.session)
         self.productos = ProductoRepository(self.session)
         self.ingredientes = IngredienteRepository(self.session)
+        self.usuarios = UsuarioRepository(self.session)
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
 
@@ -28,3 +30,7 @@ class UnitOfWork:
 
     def rollback(self):
         self.session.rollback()
+
+def get_uow() -> UnitOfWork:
+    """Dependencia para obtener una instancia de UnitOfWork."""
+    return UnitOfWork()
