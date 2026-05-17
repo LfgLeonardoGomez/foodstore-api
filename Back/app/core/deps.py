@@ -39,7 +39,7 @@ class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
         token= request.cookies.get("acces_token")
         if not token: 
             if self.auto_error:
-                raise HHTTPException(
+                raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="No se proporcionó un token de autenticación",
                     headers={"WWW-Authenticate": "Bearer"},

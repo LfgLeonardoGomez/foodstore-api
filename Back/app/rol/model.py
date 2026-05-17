@@ -8,7 +8,7 @@ from app.core.models import UsuarioRol
 from app.usuarios.model import Usuario
 
 
-class Rol:
+class Rol: #No tiene que heredar SQLModel?
     __tablename__ = "roles"
     codigo : str = Field(max_length=20, nullable=False, primary_key=True)
     nombre : str = Field(unique=True, nullable=False, min_length=2, max_length=50)
