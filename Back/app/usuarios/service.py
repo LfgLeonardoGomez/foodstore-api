@@ -40,7 +40,7 @@ class ProductoService:
 
 
     def actualizar_usuario(self, usuario_id: int, usuario: UsuarioCreate):
-        with UnitOfWork as uow:
+        with UnitOfWork() as uow:
             usuario_db = uow.usuarios.get_by_id(usuario_id)
             if not usuario_db:
                 raise HTTPException(

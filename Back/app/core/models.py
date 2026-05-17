@@ -22,7 +22,7 @@ class ProductoIngrediente(SQLModel, table=True):
 
 class UsuarioRol(AuditMixin, SQLModel, table=True):
     __tablename__ = "usuario_rol"
-    usuario_id : int = Field (foreign_key="usuario.id", primary_key=True)
+    usuario_id : int = Field (foreign_key="usuarios.id", primary_key=True)
     rol_codigo : str = Field (foreign_key="rol.codigo", primary_key=True)
     asignado_por_id : int = Field(foreign_key="usuario.id", nullable=True)
     expires_at : datetime = Field (nullable=False)

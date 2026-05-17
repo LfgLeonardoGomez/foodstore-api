@@ -22,9 +22,9 @@ from urllib import request
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 
+from Back.app.usuarios.model import Usuario
 from app.core.security import decode_access_token
 from app.core.uow import UnitOfWork, get_uow
-from app.modules.usuarios.model import Usuario
 from app.usuarios.schemas import UsuarioPublico
 
 
@@ -105,7 +105,7 @@ def require_role(allowed_roles: list[str]):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=(
-                    f"Permisos insuficientes. Tu rol es '{current_user.role}'. "
+                    f"Permisos insuficientes. Tu rol es '{current_user.roles}'. "
                     f"Se requiere uno de: {allowed_roles}"
                 ),
             )
