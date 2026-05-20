@@ -18,3 +18,13 @@ class IngredienteSimple(SQLModel):
     nombre: str
 
     model_config = {"from_attributes": True}
+
+class RolSimple(SQLModel):
+    codigo: str
+    model_config = {"from_attribute": True}
+
+class UsuarioSimple(SQLModel):
+    id: int
+    nombre: str
+    apellido: str
+    email: str

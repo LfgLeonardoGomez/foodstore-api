@@ -1,18 +1,21 @@
 
 
-from typing import List
+from typing import TYPE_CHECKING, List, Optional
 
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.models import UsuarioRol
-from app.usuarios.model import Usuario
+
+if TYPE_CHECKING:
+    from app.usuarios.model import Usuario
 
 
-class Rol: #No tiene que heredar SQLModel?
+class Rol(SQLModel, table = True):
+
     __tablename__ = "roles"
     codigo : str = Field(max_length=20, nullable=False, primary_key=True)
     nombre : str = Field(unique=True, nullable=False, min_length=2, max_length=50)
-    descripcion : str = Field(min_length= 3, max_length= 100, default=None)
+    descripcion : Optional[str] = Field(min_length= 3, max_length= 100, default=None)
 
-    usuario_rol : List["Usuario"] = Relationship(back_populates="rol",
+    usuarios : List["Usuario"] = Relationship(back_populates="roles",
                                     link_model=UsuarioRol)

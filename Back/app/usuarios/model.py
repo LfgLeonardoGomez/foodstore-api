@@ -1,9 +1,15 @@
 from sqlmodel import Relationship, SQLModel, Field
-from typing import List, Optional
-from pydantic import EmailStr
+from typing import TYPE_CHECKING, List, Optional
+
 
 from app.core.audit import AuditMixin
-from app.rol.model import Rol
+from app.core.models import UsuarioRol
+
+
+if TYPE_CHECKING:
+    from app.rol.model import Rol
+if TYPE_CHECKING:
+    from app.direccioentrega.model import DireccionEntrega
 
 class Usuario (AuditMixin,SQLModel, table = True):
     __tablename__ = "usuarios"
@@ -16,5 +22,9 @@ class Usuario (AuditMixin,SQLModel, table = True):
     disabled: bool = Field(default=False)
 
     roles: List["Rol"] = Relationship(back_populates= "Usuarios",
-                                    link_model="UsuarioRol")
+                                    link_model=UsuarioRol)
     
+    direcciones: List["DireccionEntrega"] = Relationship(
+        back_populates="usuarios"
+    )
+

@@ -2,7 +2,8 @@
 
 
 from sqlmodel import Session, select
-
+from sqlalchemy.orm import selectinload
+from app.rol.model import Rol
 from app.usuarios.model import Usuario
 from app.usuarios.schemas import UsuarioCreate
 
@@ -15,25 +16,29 @@ class UsuarioRepository:
 
     def get_by_id(self, usuario_id: int)-> Usuario:
         statement = select(Usuario).where(Usuario.id == usuario_id,
-                            Usuario.disabled == False)
+                            Usuario.disabled == False).options(selectinload(Usuario.roles)
+                            )
         
         return self.session.exec(statement).first()
     
 
     def get_by_username(self, username: str) -> Usuario:
         statement = select(Usuario).where(Usuario.username == username, 
-                            Usuario.disabled == False)
+                            Usuario.disabled == False).options(selectinload(Usuario.roles)
+                            )
         return self.session.exec(statement).first()
     
 
     def get_by_email(self, email: str) -> Usuario:
         statement = select(Usuario).where(Usuario.email == email, 
-                            Usuario.disabled == False)
+                            Usuario.disabled == False).options(selectinload(Usuario.roles)
+                            )
         return self.session.exec(statement).first()
     
 
     def get_all(self, offset: int = 0, limit: int = 100) -> list[Usuario]:
-        statement = select(Usuario).where(Usuario.disabled == False).offset(offset).limit(limit)
+        statement = select(Usuario).where(Usuario.disabled == False).offset(offset).limit(limit).options(selectinload(Usuario.roles)
+                            )
         return self.session.exec(statement).all()
     
 
@@ -61,6 +66,11 @@ class UsuarioRepository:
         self.session.refresh(usuario)
         return usuario
     
-
+    def actualizar_roles(self, usuario: Usuario, roles: list[Rol]) -> Usuario:
+        usuario.roles = roles
+        self.session.add(usuario)
+        self.session.flush()
+        self.session.refresh(usuario)
+        return usuario
 
     

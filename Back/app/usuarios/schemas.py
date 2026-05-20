@@ -1,10 +1,13 @@
 from sqlmodel import SQLModel, Field
-from pydantic import EmailStr
+
 
 class UsuarioBase(SQLModel):
-    nombre: str
-    apellido: str
-    email: EmailStr
+
+    nombre : str = Field(nullable=False)
+    apellido : str = Field(nullable=False)
+    email: str
+    celular : str = Field(max_length=20)
+
 
 class UsuarioCreate(UsuarioBase):
     password_hashed: str
@@ -15,12 +18,13 @@ class UsuarioUpdate(UsuarioBase):
 
 class UsuarioRead(UsuarioBase):
     id: int
-    roles: str 
+    roles: list[str] = Field(default_factory=list)
     disabled: bool
     
 class UsuarioPublico(UsuarioBase):
     id: int
-    roles: str
+
+    roles: list[str] = Field(default_factory=list)
     disabled: bool
 
 class Token(SQLModel):

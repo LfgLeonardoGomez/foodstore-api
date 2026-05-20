@@ -1,6 +1,7 @@
 from sqlmodel import Session
 from app.core.database import get_engine
 from app.categoria.repository import CategoriaRepository
+from app.direccioentrega.repository import DireccionEntregaRepository
 from app.ingrediente.repository import IngredienteRepository
 from app.producto.repository import ProductoRepository
 from app.usuarios.repository import UsuarioRepository
@@ -15,6 +16,7 @@ class UnitOfWork:
         self.productos = ProductoRepository(self.session)
         self.ingredientes = IngredienteRepository(self.session)
         self.usuarios = UsuarioRepository(self.session)
+        self.direcciones = DireccionEntregaRepository(self.session)
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
 
