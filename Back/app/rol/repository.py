@@ -16,4 +16,5 @@ class RolRepository:
         statement = select(Rol.codigo)
         return self.session.exec(statement)
     
+
     

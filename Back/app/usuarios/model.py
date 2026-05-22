@@ -21,10 +21,10 @@ class Usuario (AuditMixin,SQLModel, table = True):
     password_hashed: str = Field(nullable=False)
     disabled: bool = Field(default=False)
 
-    roles: List["Rol"] = Relationship(back_populates= "Usuarios",
+    roles: List["Rol"] = Relationship(back_populates= "usuarios",
                                     link_model=UsuarioRol)
     
-    direcciones: List["DireccionEntrega"] = Relationship(
-        back_populates="usuarios"
+    direcciones: list["DireccionEntrega"] = Relationship(
+        back_populates="usuario"
     )
 

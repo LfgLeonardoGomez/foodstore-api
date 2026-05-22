@@ -3,7 +3,10 @@ from fastapi import FastAPI
 from app.categoria.router import router as categoria_router
 from app.producto.router import router as producto_router
 from app.ingrediente.router import router as ingrediente_router
+from app.usuarios.router import router as usuario_router
+from app.direccioentrega.router import router as direccionentrega_router
 from app.core.database import create_db_and_tables
+from app.core.seed import seed_data
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from seed import seed_productos
@@ -12,6 +15,7 @@ from seed import seed_productos
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
+    seed_data()
     #seed_productos()
     yield
 
@@ -30,3 +34,5 @@ app.add_middleware(
 app.include_router(categoria_router)
 app.include_router(producto_router)
 app.include_router(ingrediente_router)
+app.include_router(usuario_router)
+app.include_router(direccionentrega_router)

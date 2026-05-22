@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlmodel import SQLModel, Field
 
 
@@ -10,11 +12,13 @@ class UsuarioBase(SQLModel):
 
 
 class UsuarioCreate(UsuarioBase):
-    password_hashed: str
 
+    password: str = Field(min_length=8, max_length=72)
 
 class UsuarioUpdate(UsuarioBase):
-    password_hashed: str | None = None
+    password: Optional[str] = None
+
+
 
 class UsuarioRead(UsuarioBase):
     id: int
@@ -23,10 +27,12 @@ class UsuarioRead(UsuarioBase):
     
 class UsuarioPublico(UsuarioBase):
     id: int
-
     roles: list[str] = Field(default_factory=list)
     disabled: bool
 
+class UsuarioList(SQLModel):
+    data: list[UsuarioPublico]
+    count: int
 class Token(SQLModel):
     access_token: str
     token_type: str = "bearer"

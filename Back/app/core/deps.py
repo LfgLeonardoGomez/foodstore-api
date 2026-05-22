@@ -17,14 +17,14 @@ Conoce a: UoW, Security, Model
 """
 
 from typing import Annotated
-from urllib import request
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 
-from Back.app.usuarios.model import Usuario
+
 from app.core.security import decode_access_token
 from app.core.uow import UnitOfWork, get_uow
+from app.usuarios.model import Usuario
 from app.usuarios.schemas import UsuarioPublico
 
 
@@ -36,7 +36,7 @@ class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
     como navegadores con autenticación basada en cookies.
     """
     async def __call__(self, request: Request) -> str | None:
-        token= request.cookies.get("acces_token")
+        token= request.cookies.get("access_token")
         if not token: 
             if self.auto_error:
                 raise HTTPException(
@@ -48,7 +48,7 @@ class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
                 return None
         return token
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/api/v1/auth/token")
+oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="/api/v1/login")
 
 
 async def get_current_user(
@@ -66,17 +66,17 @@ async def get_current_user(
     if payload is None:
         raise credentials_exception
 
-    username: str | None = payload.get("sub")
-    if username is None:
+    email: str | None = payload.get("sub")
+    if email is None:
         raise credentials_exception
 
-    with uow:
-        user = uow.usuarios.get_by_username(username)
+    
+    user = uow.usuarios.get_by_email(email)
 
     if user is None:
         raise credentials_exception
 
-    return UsuarioPublico.model_validate(user)
+    return user
 
 
 async def get_current_active_user(
@@ -88,7 +88,7 @@ async def get_current_active_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cuenta de usuario desactivada",
         )
-    return UsuarioPublico.model_validate(current_user)
+    return current_user
 
 
 def require_role(allowed_roles: list[str]):
@@ -101,7 +101,9 @@ def require_role(allowed_roles: list[str]):
     async def role_checker(
         current_user: Annotated[Usuario, Depends(get_current_active_user)],
     ) -> Usuario:
-        if current_user.role not in allowed_roles:
+        user_roles = [rol.codigo for rol in current_user.roles]
+
+        if not any (role in allowed_roles for role in user_roles):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=(

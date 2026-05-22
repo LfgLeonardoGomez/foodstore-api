@@ -1,6 +1,9 @@
 from datetime import datetime
 from typing import Optional
 from sqlmodel import Field, SQLModel
+from sqlalchemy import Column
+from sqlalchemy.dialects.postgresql import JSONB
+
 
 from app.core.audit import AuditMixin
 
@@ -24,7 +27,8 @@ class UsuarioRol(AuditMixin, SQLModel, table=True):
     __tablename__ = "usuario_rol"
     usuario_id : int = Field (foreign_key="usuarios.id", primary_key=True)
     rol_codigo : str = Field (foreign_key="roles.codigo", primary_key=True)
+
     asignado_por_id : int = Field(foreign_key="usuarios.id", nullable=True)
 
-    expires_at : datetime = Field (nullable=False)
+    # expires_at : datetime = Field (nullable=False)
     

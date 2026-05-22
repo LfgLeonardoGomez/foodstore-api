@@ -4,7 +4,6 @@ from sqlmodel import SQLModel
 
 
 class DireccionEntregaBase(SQLModel):
-    usuario_id: int
     alias: str
     linea_1: str
     linea_2: str
@@ -14,16 +13,23 @@ class DireccionEntregaBase(SQLModel):
     es_principal: bool
 
 class DireccionEntregaCreate(DireccionEntregaBase):
-    usuario_id: int
     pass
 
-class DireccionEntregaUpdate(DireccionEntregaBase):
-    pass
+
+
+class DireccionEntregaUpdate(SQLModel):
+    alias: str | None = None
+    linea_1: str | None = None
+    linea_2: str | None = None
+    ciudad: str | None = None
+    provincia: str | None = None
+    codigo_postal: str | None = None
+    es_principal: bool | None = None
 
 class DireccionEntregaRead(DireccionEntregaBase):
     id: int
 
-class DireccionEntregaPublico(DireccionEntregaBase):
-    id:int
-
+class DireccionEntregaList(SQLModel):
+    data: list[DireccionEntregaRead]
+    count: int
 

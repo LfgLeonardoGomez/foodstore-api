@@ -13,7 +13,7 @@ class DireccionEntrega(AuditMixin, SQLModel, table = True):
     __tablename__ = "direcciones"
     id : int | None = Field(primary_key=True)
 
-    usuario_id : int = Field(foreign_key = "usuario.id", nullable=False)
+    usuario_id : int = Field(foreign_key = "usuarios.id", nullable=False)
     alias: str = Field(max_length=50)
     linea_1: str = Field(nullable=False)
     linea_2: str = Field()
@@ -22,6 +22,5 @@ class DireccionEntrega(AuditMixin, SQLModel, table = True):
     codigo_postal: str = Field(max_length=10)
     es_principal: bool = Field(nullable=False, default=False)
     disabled: bool = Field(default=False)
-    usuario: int = Relationship(back_populates= "usuarios"
-                                    , link_model="direcciones")
+    usuario: "Usuario" = Relationship(back_populates="direcciones")
 

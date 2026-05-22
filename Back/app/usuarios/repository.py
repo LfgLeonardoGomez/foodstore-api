@@ -14,21 +14,13 @@ class UsuarioRepository:
         self.session = session
 
 
-    def get_by_id(self, usuario_id: int)-> Usuario:
+    def get_by_id(self, usuario_id: int) -> Usuario:
         statement = select(Usuario).where(Usuario.id == usuario_id,
                             Usuario.disabled == False).options(selectinload(Usuario.roles)
                             )
         
         return self.session.exec(statement).first()
     
-
-    def get_by_username(self, username: str) -> Usuario:
-        statement = select(Usuario).where(Usuario.username == username, 
-                            Usuario.disabled == False).options(selectinload(Usuario.roles)
-                            )
-        return self.session.exec(statement).first()
-    
-
     def get_by_email(self, email: str) -> Usuario:
         statement = select(Usuario).where(Usuario.email == email, 
                             Usuario.disabled == False).options(selectinload(Usuario.roles)
@@ -73,4 +65,6 @@ class UsuarioRepository:
         self.session.refresh(usuario)
         return usuario
 
-    
+    def get_by_id_including_disabled(self, usuario_id: int) -> Usuario | None:
+        statement = select(Usuario).where(Usuario.id == usuario_id)
+        return self.session.exec(statement).first()

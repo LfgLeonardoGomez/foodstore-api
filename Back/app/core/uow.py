@@ -1,9 +1,11 @@
 from sqlmodel import Session
 from app.core.database import get_engine
 from app.categoria.repository import CategoriaRepository
+from app.detallepedido.repository import DetallePedidoRepository
 from app.direccioentrega.repository import DireccionEntregaRepository
 from app.ingrediente.repository import IngredienteRepository
 from app.producto.repository import ProductoRepository
+from app.rol.repository import RolRepository
 from app.usuarios.repository import UsuarioRepository
 
 class UnitOfWork:
@@ -17,6 +19,8 @@ class UnitOfWork:
         self.ingredientes = IngredienteRepository(self.session)
         self.usuarios = UsuarioRepository(self.session)
         self.direcciones = DireccionEntregaRepository(self.session)
+        self.roles = RolRepository(self.session)
+        self.detalles_pedido = DetallePedidoRepository(self.session)
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
 
@@ -35,4 +39,5 @@ class UnitOfWork:
 
 def get_uow() -> UnitOfWork:
     """Dependencia para obtener una instancia de UnitOfWork."""
-    return UnitOfWork()
+    with UnitOfWork() as uow:
+        yield uow
