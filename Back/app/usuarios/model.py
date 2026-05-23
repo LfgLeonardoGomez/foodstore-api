@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, List, Optional
 
 from app.core.audit import AuditMixin
 from app.core.models import UsuarioRol
+from app.historialpedidoestado.model import HistorialEstadoPedido
 
 
 if TYPE_CHECKING:
@@ -25,6 +26,10 @@ class Usuario (AuditMixin,SQLModel, table = True):
                                     link_model=UsuarioRol)
     
     direcciones: list["DireccionEntrega"] = Relationship(
+        back_populates="usuario"
+    )
+
+    historial_estados_pedido: list["HistorialEstadoPedido"] = Relationship(
         back_populates="usuario"
     )
 

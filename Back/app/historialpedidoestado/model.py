@@ -1,0 +1,49 @@
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Optional
+
+from sqlmodel import Relationship, SQLModel, Field
+from sqlalchemy import Column, BigInteger, String, Text, DateTime, ForeignKey
+
+
+
+if TYPE_CHECKING:
+    from app.pedido.model import Pedido
+    from app.estadopedido.model import EstadoPedido
+    from app.usuarios.model import Usuario
+
+
+class HistorialEstadoPedido(SQLModel, table=True):
+    __tablename__ = "historial_estados_pedido"
+
+    id: int | None = Field(primary_key=True, autoincrement=True)
+
+
+    pedido_id: int = Field()
+
+    estado_desde: str = Field(foreign_key="estados_pedido.codigo", nullable=True, default= None)
+
+    estado_hacia: str = Field(foreign_key="estados_pedido.codigo", nullable=False, default=None)   
+
+    usuario_id: int = Field(foreign_key="usuarios.id",default=None, nullable=False)
+
+    motivo: str | None = Field(nullable=True, default=None)
+
+    created_at: datetime | None = Field(default_factory=lambda: datetime.now(UTC))
+
+
+    pedido: Optional["Pedido"] = Relationship(back_populates="historial_estados")
+    usuario: Optional["Usuario"] = Relationship(back_populates="historial_estados")
+    
+    desde: Optional["EstadoPedido"] = Relationship(
+        sa_relationship_kwargs={
+            "foreign_keys": "[HistorialEstadoPedido.estado_desde]",
+            "lazy": "select"
+        }
+    )
+
+    hacia: Optional["EstadoPedido"] = Relationship(
+        sa_relationship_kwargs={
+            "foreign_keys": "[HistorialEstadoPedido.estado_hacia]",
+            "lazy": "select"
+        }
+    )
