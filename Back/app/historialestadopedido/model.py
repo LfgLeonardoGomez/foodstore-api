@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 class HistorialEstadoPedido(SQLModel, table=True):
     __tablename__ = "historial_estados_pedido"
 
-    id: int | None = Field(primary_key=True, autoincrement=True)
+    id: int | None = Field(primary_key=True)
 
 
-    pedido_id: int = Field()
+    pedido_id: int = Field(foreign_key="pedidos.id")
 
-    estado_desde: str = Field(foreign_key="estados_pedido.codigo", nullable=True, default= None)
+    estado_desde: str = Field(foreign_key="estado_pedido.codigo", nullable=True, default= None)
 
-    estado_hacia: str = Field(foreign_key="estados_pedido.codigo", nullable=False, default=None)   
+    estado_hacia: str = Field(foreign_key="estado_pedido.codigo", nullable=False, default=None)   
 
     usuario_id: int = Field(foreign_key="usuarios.id",default=None, nullable=False)
 
@@ -31,8 +31,8 @@ class HistorialEstadoPedido(SQLModel, table=True):
     created_at: datetime | None = Field(default_factory=lambda: datetime.now(UTC))
 
 
-    pedido: Optional["Pedido"] = Relationship(back_populates="historial_estados")
-    usuario: Optional["Usuario"] = Relationship(back_populates="historial_estados")
+    pedido: Optional["Pedido"] = Relationship(back_populates="historial_estado")
+    usuario: Optional["Usuario"] = Relationship(back_populates="historial_estados_pedido")
     
     desde: Optional["EstadoPedido"] = Relationship(
         sa_relationship_kwargs={

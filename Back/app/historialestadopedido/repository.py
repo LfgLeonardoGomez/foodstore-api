@@ -2,10 +2,10 @@
 
 from sqlmodel import select
 
-from app.historialpedidoestado.model import HistorialEstadoPedido
+from app.historialestadopedido.model import HistorialEstadoPedido
 
 
-class HistorialPedidoEstadoRepository:
+class HistorialEstadoPedidoRepository:
     
     def __init__(self, session):
         self.session = session
@@ -21,7 +21,7 @@ class HistorialPedidoEstadoRepository:
         return self.session.exec(statement).first()
     
     def get_by_pedido_id(self, pedido_id: int):
-        statement = select(HistorialEstadoPedido).where(
+        historial = self.session.query(HistorialEstadoPedido).filter(
             HistorialEstadoPedido.pedido_id == pedido_id
-        ).order_by(HistorialEstadoPedido.created_at)
-        return self.session.exec(statement).all()
+        ).order_by(HistorialEstadoPedido.created_at).all()
+        return historial

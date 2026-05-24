@@ -7,6 +7,8 @@ from sqlmodel import Field, Relationship, SQLModel
 from app.core.audit import AuditMixin
 if TYPE_CHECKING:
     from app.usuarios.model import Usuario
+if TYPE_CHECKING:
+    from app.pedido.model import Pedido
 
 
 class DireccionEntrega(AuditMixin, SQLModel, table = True):
@@ -23,4 +25,5 @@ class DireccionEntrega(AuditMixin, SQLModel, table = True):
     es_principal: bool = Field(nullable=False, default=False)
     disabled: bool = Field(default=False)
     usuario: "Usuario" = Relationship(back_populates="direcciones")
+    pedidos: list["Pedido"] = Relationship(back_populates="direccion")
 

@@ -28,7 +28,7 @@ class UsuarioRol(AuditMixin, SQLModel, table=True):
     usuario_id : int = Field (foreign_key="usuarios.id", primary_key=True)
     rol_codigo : str = Field (foreign_key="roles.codigo", primary_key=True)
 
-    asignado_por_id : int = Field(foreign_key="usuarios.id", nullable=True)
+    # asignado_por_id : int = Field(foreign_key="usuarios.id", nullable=True)
 
     # expires_at : datetime = Field (nullable=False)
     

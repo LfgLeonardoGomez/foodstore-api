@@ -1,5 +1,7 @@
 
 
+from typing import Optional
+
 from datetime import datetime
 
 from sqlmodel import Field, SQLModel
@@ -19,13 +21,12 @@ class DetallePedidoBase(SQLModel):
     )
 
 class DetallePedidoCreate(SQLModel):
-    pedido_id: int
     producto_id: int
     cantidad: int = Field(ge=1)
 
     nombre_snapshot: str = Field(max_length=200)
     precio_snapshot: float = Field(ge=0)
-    subtotal_snapshot: float = Field(ge=0)
+    subtotal_snapshot: Optional[float] = None
 
     personalizacion: list[list[int]] = Field(default_factory=list)
 

@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
 from app.core.deps import get_current_active_user, require_role,get_current_user
-from app.historialpedidoestado.schema import (
+from app.historialestadopedido.schema import (
     HistorialPedidoEstadoCreate,
     HistorialPedidoEstadoRead,
 )
-from app.historialpedidoestado.service import HistorialEstadoPedidoService
+from app.historialestadopedido.service import HistorialEstadoPedidoService
 
 
 
@@ -27,7 +27,7 @@ def registrar_transicion(
         pedido_id=pedido_id,
         estado_hacia=payload.estado_hacia,
         usuario_id=current_user.id,
-        rol=current_user.rol,
+        roles=[r.codigo for r in current_user.roles],
         motivo=payload.motivo,
     )
 
@@ -44,9 +44,6 @@ def get_historial_by_pedido(
     return service.get_historial_by_pedido(pedido_id)
 
 
-# ---------------------------------------------------------------------------
-# GET — registro puntual por id
-# ---------------------------------------------------------------------------
 @router.get(
     "/historial/{historial_id}",
     response_model=HistorialPedidoEstadoRead,

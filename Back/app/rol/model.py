@@ -18,4 +18,9 @@ class Rol(SQLModel, table = True):
     descripcion : Optional[str] = Field(min_length= 3, max_length= 100, default=None)
 
     usuarios : List["Usuario"] = Relationship(back_populates="roles",
-                                    link_model=UsuarioRol)
+                                    link_model=UsuarioRol,
+                                    sa_relationship_kwargs={
+                                        "primaryjoin": "UsuarioRol.rol_codigo==Rol.codigo",
+                                        "secondaryjoin": "UsuarioRol.usuario_id==Usuario.id",
+                                        "viewonly": True
+                                    })

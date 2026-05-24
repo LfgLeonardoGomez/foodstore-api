@@ -1,3 +1,51 @@
+# Environment
 .env
+.env.*
+.env_local
+.env.production
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/
+ MANIFEST
+
+# Database (sqlite etc)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Uvicorn
+*.pid
+
+# OS
+.DS_Store
+Thumbs.db

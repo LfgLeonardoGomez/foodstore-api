@@ -55,7 +55,15 @@ def logout(response: Response):
 @router.get("/me", response_model= UsuarioPublico)
 def read_current_user(current_user: Annotated[Usuario, 
                         Depends(get_current_active_user)]):
-    return current_user
+    return {
+        "id": current_user.id,
+        "nombre": current_user.nombre,
+        "apellido": current_user.apellido,
+        "email": current_user.email,
+        "celular": current_user.celular,
+        "disabled": current_user.disabled,
+        "roles": [rol.codigo for rol in current_user.roles]
+    }
 
 @router.get("/admin/usuarios", response_model = UsuarioList)
 def listar_usuarios(admin: Annotated[Usuario, Depends(require_role(["ADMIN"]))]):

@@ -1,5 +1,5 @@
 
-from select import select
+from sqlalchemy import select
 
 from app.detallepedido.model import DetallePedido
 from app.detallepedido.schema import DetallePedidoCreate, DetallePedidoList, DetallePedidoPublic
@@ -9,9 +9,8 @@ class DetallePedidoRepository:
     def __init__(self, session):
         self.session = session
 
-    def create(self, detalle_pedido: DetallePedidoCreate
-            )-> DetallePedidoPublic:
-        detalle_db = DetallePedido.model_validate(detalle_pedido)
+    def create(self, detalle_data: dict) -> DetallePedidoPublic:
+        detalle_db = DetallePedido(**detalle_data)
         
         self.session.add(detalle_db)
         self.session.flush()
@@ -20,17 +19,17 @@ class DetallePedidoRepository:
     
     def get_by_id_pedido(self, pedido_id: int) -> DetallePedidoList:
         
-        statement = select(DetallePedido).where(
-            DetallePedido.pedido_id == pedido_id)
-        detalles = self.session.exec(statement).all()
-        return DetallePedidoList(data=detalles, count=len(detalles))
+        detalles = self.session.query(DetallePedido).filter(
+            DetallePedido.pedido_id == pedido_id
+        ).all()
+        detalle_list = [DetallePedidoPublic.model_validate(d) for d in detalles]
+        return DetallePedidoList(data=detalle_list, count=len(detalle_list))
     
     def get_by_id(self, pedido_id:int, producto_id:int) -> DetallePedidoPublic | None:
-        statement = select(DetallePedido).where(
+        detalle = self.session.query(DetallePedido).filter(
             DetallePedido.pedido_id == pedido_id,
             DetallePedido.producto_id == producto_id
-        )
-        detalle = self.session.exec(statement).first()
+        ).first()
         if not detalle:
             return None
             

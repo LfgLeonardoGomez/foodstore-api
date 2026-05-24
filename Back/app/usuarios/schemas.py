@@ -15,7 +15,11 @@ class UsuarioCreate(UsuarioBase):
 
     password: str = Field(min_length=8, max_length=72)
 
-class UsuarioUpdate(UsuarioBase):
+class UsuarioUpdate(SQLModel):
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    email: Optional[str] = None
+    celular: Optional[str] = None
     password: Optional[str] = None
 
 

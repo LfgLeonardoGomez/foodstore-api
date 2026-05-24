@@ -13,10 +13,6 @@ class UsuarioService:
     def __init__(self):
         self.uow = UnitOfWork()
 
-# ● Registro de usuarios con asignación automática del rol CLIENT
-# ● Login con email/password → genera cookie “access token” (JWT, 30 min)
-# ● Endpoint GET /me para obtener datos del usuario autenticado 
-
 
 
     def crear_usuario(self, usuario: UsuarioCreate):
@@ -40,7 +36,15 @@ class UsuarioService:
 
             )
             rta = uow.usuarios.create(usuario_db)
-            return UsuarioPublico.model_validate(rta)
+            return UsuarioPublico.model_validate({
+                "id": rta.id,
+                "nombre": rta.nombre,
+                "apellido": rta.apellido,
+                "email": rta.email,
+                "celular": rta.celular,
+                "disabled": rta.disabled,
+                "roles": [rol.codigo for rol in rta.roles]
+            })
 
 
 
@@ -70,7 +74,16 @@ class UsuarioService:
             for key, value in update_data.items():
                 setattr(usuario_db, key, value)
 
-            return UsuarioPublico.model_validate(uow.usuarios.update(usuario_db))
+            updated = uow.usuarios.update(usuario_db)
+            return UsuarioPublico.model_validate({
+                "id": updated.id,
+                "nombre": updated.nombre,
+                "apellido": updated.apellido,
+                "email": updated.email,
+                "celular": updated.celular,
+                "disabled": updated.disabled,
+                "roles": [rol.codigo for rol in updated.roles]
+            })
         
     
     def autenticar_usuario(self, email: str, password: str) -> Token:
@@ -102,7 +115,15 @@ class UsuarioService:
             with UnitOfWork() as uow:
                 data = uow.usuarios.get_all(0,20)
                 return UsuarioList(
-                    data=[UsuarioPublico.model_validate(u) for u in data],
+                    data=[UsuarioPublico.model_validate({
+                        "id": u.id,
+                        "nombre": u.nombre,
+                        "apellido": u.apellido,
+                        "email": u.email,
+                        "celular": u.celular,
+                        "disabled": u.disabled,
+                        "roles": [rol.codigo for rol in u.roles]
+                    }) for u in data],
                     count=len(data)
                 )
     def traer_por_id(self, usuario_id: int) -> UsuarioPublico:
@@ -113,7 +134,15 @@ class UsuarioService:
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail="Usuario no encontrado"
                     )
-                return UsuarioPublico.model_validate(usuario)
+                return UsuarioPublico.model_validate({
+                    "id": usuario.id,
+                    "nombre": usuario.nombre,
+                    "apellido": usuario.apellido,
+                    "email": usuario.email,
+                    "celular": usuario.celular,
+                    "disabled": usuario.disabled,
+                    "roles": [rol.codigo for rol in usuario.roles]
+                })
             
     def traer_por_email(self, email: str) -> Optional[Usuario]:
             with UnitOfWork() as uow:
@@ -123,7 +152,15 @@ class UsuarioService:
                         status_code=status.HTTP_404_NOT_FOUND,
                         detail="Usuario no encontrado"
                     )
-                return UsuarioPublico.model_validate(usuario)
+                return UsuarioPublico.model_validate({
+                    "id": usuario.id,
+                    "nombre": usuario.nombre,
+                    "apellido": usuario.apellido,
+                    "email": usuario.email,
+                    "celular": usuario.celular,
+                    "disabled": usuario.disabled,
+                    "roles": [rol.codigo for rol in usuario.roles]
+                })
             
     def set_disabled(self, usuario_id: int, disabled: bool) -> UsuarioPublico:
             with UnitOfWork() as uow:
@@ -134,7 +171,16 @@ class UsuarioService:
                         detail="Usuario no encontrado"
                     )
                 usuario.disabled = disabled
-                return UsuarioPublico.model_validate(uow.usuarios.update(usuario))   
+                uow.usuarios.update(usuario)
+                return UsuarioPublico.model_validate({
+                    "id": usuario.id,
+                    "nombre": usuario.nombre,
+                    "apellido": usuario.apellido,
+                    "email": usuario.email,
+                    "celular": usuario.celular,
+                    "disabled": usuario.disabled,
+                    "roles": [rol.codigo for rol in usuario.roles]
+                })   
 
     def modificar_roles(self, usuario_id: int, roles: List[str]) :
         with UnitOfWork() as uow:

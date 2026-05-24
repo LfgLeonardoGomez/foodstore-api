@@ -4,13 +4,15 @@ from typing import TYPE_CHECKING, List, Optional
 
 from app.core.audit import AuditMixin
 from app.core.models import UsuarioRol
-from app.historialpedidoestado.model import HistorialEstadoPedido
+from app.historialestadopedido.model import HistorialEstadoPedido
 
 
 if TYPE_CHECKING:
     from app.rol.model import Rol
 if TYPE_CHECKING:
     from app.direccioentrega.model import DireccionEntrega
+if TYPE_CHECKING:
+    from app.pedido.model import Pedido
 
 class Usuario (AuditMixin,SQLModel, table = True):
     __tablename__ = "usuarios"
@@ -23,7 +25,12 @@ class Usuario (AuditMixin,SQLModel, table = True):
     disabled: bool = Field(default=False)
 
     roles: List["Rol"] = Relationship(back_populates= "usuarios",
-                                    link_model=UsuarioRol)
+                                    link_model=UsuarioRol,
+                                    sa_relationship_kwargs={
+                                        "primaryjoin": "UsuarioRol.usuario_id==Usuario.id",
+                                        "secondaryjoin": "UsuarioRol.rol_codigo==Rol.codigo"
+                                        
+                                    })
     
     direcciones: list["DireccionEntrega"] = Relationship(
         back_populates="usuario"
@@ -32,4 +39,6 @@ class Usuario (AuditMixin,SQLModel, table = True):
     historial_estados_pedido: list["HistorialEstadoPedido"] = Relationship(
         back_populates="usuario"
     )
+
+    pedidos: list["Pedido"] = Relationship(back_populates="usuario")
 

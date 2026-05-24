@@ -1,10 +1,7 @@
 
 from typing import Optional
 
-from pydantic import Field, Field
-
-
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, Field
 
 
 class EstadoPedido (SQLModel, table = True):

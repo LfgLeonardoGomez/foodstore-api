@@ -34,6 +34,7 @@ def get_engine() -> Engine:
     print("DB_USER:", DB_USER)
     print("DB_PASSWORD:", DB_PASSWORD)
     print("DATABASE_URL:", DATABASE_URL)
+    print(repr(DATABASE_URL))
 
     global engine
     if engine is None:

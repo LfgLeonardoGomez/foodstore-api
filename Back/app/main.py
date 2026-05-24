@@ -5,6 +5,9 @@ from app.producto.router import router as producto_router
 from app.ingrediente.router import router as ingrediente_router
 from app.usuarios.router import router as usuario_router
 from app.direccioentrega.router import router as direccionentrega_router
+from app.historialestadopedido.router import router as historial_estado_pedido_router
+from app.detallepedido.router import router as detalle_pedido_router
+from app.pedido.router import router as pedido_router
 from app.core.database import create_db_and_tables
 from app.core.seed import seed_data
 from contextlib import asynccontextmanager
@@ -37,3 +40,5 @@ app.include_router(ingrediente_router)
 app.include_router(usuario_router)
 app.include_router(direccionentrega_router)
 app.include_router(historial_estado_pedido_router)
+app.include_router(detalle_pedido_router)
+app.include_router(pedido_router)

@@ -3,7 +3,12 @@ from app.core.database import get_engine
 from app.categoria.repository import CategoriaRepository
 from app.detallepedido.repository import DetallePedidoRepository
 from app.direccioentrega.repository import DireccionEntregaRepository
+from app.estadopedido.repository import EstadoPedidoRepository
+from app.formadepago.repository import FormaDePagoRepository
+from app.historialestadopedido.model import HistorialEstadoPedido
+from app.historialestadopedido.repository import HistorialEstadoPedidoRepository
 from app.ingrediente.repository import IngredienteRepository
+from app.pedido.repository import PedidoRepository
 from app.producto.repository import ProductoRepository
 from app.rol.repository import RolRepository
 from app.usuarios.repository import UsuarioRepository
@@ -21,6 +26,11 @@ class UnitOfWork:
         self.direcciones = DireccionEntregaRepository(self.session)
         self.roles = RolRepository(self.session)
         self.detalles_pedido = DetallePedidoRepository(self.session)
+        self.pedidos = PedidoRepository(self.session)
+        self.formas_pago = FormaDePagoRepository(self.session)
+        self.estadopedido = EstadoPedidoRepository(self.session)
+        self.historialestadopedido = HistorialEstadoPedidoRepository(self.session)
+        
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
 
@@ -37,7 +47,7 @@ class UnitOfWork:
     def rollback(self):
         self.session.rollback()
 
-def get_uow() -> UnitOfWork:
+def get_uow() -> UnitOfWork():
     """Dependencia para obtener una instancia de UnitOfWork."""
     with UnitOfWork() as uow:
         yield uow

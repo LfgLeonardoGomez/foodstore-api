@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 from app.estadopedido.model import EstadoPedido
 
 
-class EstadoPedidoService:
+class EstadoPedidoRepository:
 
     def __init__(self, session: Session):
         self.session = session
