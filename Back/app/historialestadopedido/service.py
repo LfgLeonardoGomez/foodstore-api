@@ -57,6 +57,9 @@ class HistorialEstadoPedidoService:
                 )
             )
 
+            pedido = uow.pedidos.get_by_id(pedido_id)
+            pedido.estado_codigo = estado_hacia
+
             # Convertir a dict antes de que cierre la session
             return {
                 "id": nuevo_registro.id,
