@@ -31,6 +31,8 @@ class CategoriaService:
             
                 categoria_existente.descripcion = categoria.descripcion
                 categoria_existente.disponible = True
+                categoria_existente.categoria_padre_id = categoria.categoria_padre_id
+                categoria_existente.disponible =True
                 print("Actualizando categoría existente:")
                 uow.categorias.update(categoria_existente)
                 return CategoriaRead.model_validate(categoria_existente)
