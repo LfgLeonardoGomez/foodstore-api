@@ -1,5 +1,5 @@
 from sqlalchemy.orm import selectinload
-from sqlmodel import select, Session
+from sqlmodel import select, Session , func
 from app import producto
 from app.categoria.model import Categoria
 from app.ingrediente.model import Ingrediente
@@ -42,6 +42,13 @@ class ProductoRepository:
             producto.ingredientes = [i for i in producto.ingredientes if i.disponible]
     
         return productos
+    
+    #uncion para paginacion
+    def count_all (self) -> int:
+        statement = select(func.count()).select_from(Producto).where(Producto.disponible == True)
+        
+        return self.session.exec (statement).one()
+
     
     def get_by_nombre(self, nombre: str) -> Producto:
         statement = select(Producto).where(Producto.nombre == nombre)

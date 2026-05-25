@@ -32,11 +32,12 @@ class ProductoService:
 
     def listar_productos(self, offset : int = 0, limit : int = 100) -> ProductoList:
         with UnitOfWork() as uow:
+            total = uow.productos.count_all()
             productos = uow.productos.get_all(offset=offset, limit=limit)
             data = [ProductoResponse.model_validate(prod) for prod in productos]
             return ProductoList(
                 data=data,
-                count=len(data)
+                count=total
             )
 
     def obtener_producto_por_id(self, producto_id: int) -> ProductoResponse:

@@ -19,7 +19,7 @@ from seed import seed_productos
 async def lifespan(app: FastAPI):
     create_db_and_tables()
     seed_data()
-    #seed_productos()
+    # seed_productos()
     yield
 
 app = FastAPI(lifespan=lifespan)
