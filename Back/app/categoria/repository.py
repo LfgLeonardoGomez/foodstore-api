@@ -26,13 +26,16 @@ class CategoriaRepository:
         statement = select(Categoria).offset(offset).limit(limit).where(
         Categoria.disponible == True
         ).order_by(Categoria.id).options(
-        selectinload(Categoria.productos)
+        selectinload(Categoria.productos),
+        selectinload(Categoria.subcategorias),
+        selectinload(Categoria.categoria_padre)
         )
         categorias = self.session.exec(statement).all()
     
     # Filtrar productos eliminados en Python
         for categoria in categorias:
             categoria.productos = [p for p in categoria.productos if p.disponible]
+            categoria.subcategorias = [s for s in categoria.subcategorias if s.disponible]
     
         return categorias
 
@@ -41,19 +44,26 @@ class CategoriaRepository:
             Categoria.id == categoria_id, 
             Categoria.disponible == True
             ).options(
-            selectinload(Categoria.productos)
+            selectinload(Categoria.productos),
+            selectinload(Categoria.subcategorias),
+            selectinload(Categoria.categoria_padre)
             )
         categoria = self.session.exec(statement).first()
     
     # Filtrar productos eliminados
         if categoria:
             categoria.productos = [p for p in categoria.productos if p.disponible]
+            categoria.subcategorias = [s for s in categoria.subcategorias if s.disponible]
     
         return categoria
 
     def get_by_nombre(self, nombre: str) -> Categoria:
         statement = select(Categoria).where(Categoria.nombre == nombre)
         return self.session.exec(statement).first()
+    
+    def get_subcategorias_by_padre_id(self, padre_id: int) -> list[Categoria]:
+        statement = select(Categoria).where(Categoria.categoria_padre_id == padre_id)
+        return self.session.exec(statement).all()
     
     def create(self, categoria: Categoria) -> Categoria:
         self.session.add(categoria)

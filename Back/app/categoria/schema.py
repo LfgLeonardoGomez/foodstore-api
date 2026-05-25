@@ -7,11 +7,12 @@ class CategoriaBase(SQLModel):
     descripcion: Optional[str] = Field(min_length=3, max_length=250)
 
 class CategoriaCreate(CategoriaBase):
-    pass
+    categoria_padre_id: Optional[int] = None
 
 class CategoriaUpdate(SQLModel):
-    nombre: Optional[str] = Field(min_length=3, max_length=100)
-    descripcion: Optional[str] = Field(min_length=3, max_length=250)
+    nombre: Optional[str] = Field(default=None, min_length=3, max_length=100)
+    descripcion: Optional[str] = Field(default=None, min_length=3, max_length=250)
+    categoria_padre_id: Optional[int] = None
 
 class CategoriaSimple(SQLModel):
     id: int
@@ -21,6 +22,9 @@ class CategoriaSimple(SQLModel):
 
 class CategoriaResponse(CategoriaBase):
     id: int
+    categoria_padre_id: Optional[int] = None
+    categoria_padre: Optional[CategoriaSimple] = None
+    subcategorias: list[CategoriaSimple] = Field(default_factory=list)
     productos: list[ProductoSimple] = Field(default_factory=list)
     model_config = {"from_attributes": True}
 
@@ -30,6 +34,8 @@ class CategoriaList(SQLModel):
 
 class CategoriaRead(CategoriaBase):
     id: int
+    categoria_padre_id: Optional[int] = None
+    subcategorias: list[CategoriaSimple] = Field(default_factory=list)
 
     model_config = {"from_attributes": True}
 
