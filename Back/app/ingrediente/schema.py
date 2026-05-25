@@ -14,6 +14,7 @@ class IngredienteUpdate(SQLModel):
     nombre: Optional[str] = Field(min_length=3, max_length=100)
     descripcion: Optional[str] = Field(min_length=3, max_length=250)
     es_alergeno: Optional[bool] = None
+    disponible: Optional [bool] = None
 
 class IngredienteResponse(IngredienteBase):
     id: int
