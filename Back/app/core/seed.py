@@ -171,8 +171,44 @@ def seed_admin() -> None:
         # email: admin@foodstore.com
         # password: admin1234
 
+def seed_test_users() -> None:
+    with UnitOfWork() as uow:
+        usuarios_test = [
+            {
+                "email": "stock@foodstore.com",
+                "password": "stock1234",
+                "nombre": "Juan",
+                "apellido": "Stock",
+                "rol": "STOCK"
+            },
+            {
+                "email": "pedidos@foodstore.com",
+                "password": "pedidos1234",
+                "nombre": "Maria",
+                "apellido": "Pedidos",
+                "rol": "PEDIDOS"
+            },
+        ]
+
+        for u in usuarios_test:
+            if uow.usuarios.get_by_email(u["email"]):
+                continue
+
+            rol = uow.roles.get_by_codigo(u["rol"])
+            nuevo = Usuario(
+                nombre=u["nombre"],
+                apellido=u["apellido"],
+                email=u["email"],
+                celular="0000000000",
+                password_hashed=hash_password(u["password"]),
+                disabled=False,
+                roles=[rol],
+            )
+            uow.session.add(nuevo)
+
 def seed_data() -> None:
     seed_roles()
     seed_formas_pago()
     seed_estados_pedido()
     seed_admin()
+    seed_test_users()
