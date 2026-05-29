@@ -5,7 +5,7 @@
 from decimal import Decimal
 
 
-from sqlmodel import SQLModel
+from sqlmodel import Field, SQLModel
 
 from app.detallepedido.model import DetallePedido
 from app.detallepedido.schema import DetallePedidoCreate, DetallePedidoRead
@@ -38,3 +38,7 @@ class PedidoList(SQLModel):
     data: list[PedidoPublic]
     count: int
 
+class PedidoEstadoUpdate(SQLModel):
+
+    nuevo_estado: str = Field(min_length=1, max_length=50)
+    motivo: str | None = Field(default=None, max_length=200)

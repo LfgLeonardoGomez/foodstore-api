@@ -28,13 +28,6 @@ engine: Optional[Engine] = None
 
 def get_engine() -> Engine:
     """Obtener el motor de base de datos (singleton pattern)"""
-    print("MIRA ACA !!!!!")
-    print("DB_HOST:", DB_HOST)
-    print("DB_NAME:", DB_NAME)
-    print("DB_USER:", DB_USER)
-    print("DB_PASSWORD:", DB_PASSWORD)
-    print("DATABASE_URL:", DATABASE_URL)
-    print(repr(DATABASE_URL))
 
     global engine
     if engine is None:

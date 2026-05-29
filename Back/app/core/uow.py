@@ -1,3 +1,5 @@
+from typing import Generator
+
 from sqlmodel import Session
 from app.core.database import get_engine
 from app.categoria.repository import CategoriaRepository
@@ -47,7 +49,7 @@ class UnitOfWork:
     def rollback(self):
         self.session.rollback()
 
-def get_uow() -> UnitOfWork():
+def get_uow() -> Generator[UnitOfWork, None,None]:
     """Dependencia para obtener una instancia de UnitOfWork."""
     with UnitOfWork() as uow:
         yield uow

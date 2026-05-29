@@ -13,7 +13,7 @@ class RolRepository:
         return self.session.exec(statement).first()
     
     def get_all(self) -> list[Rol]:
-        statement = select(Rol.codigo)
+        statement = select(Rol)
         return self.session.exec(statement)
     
 

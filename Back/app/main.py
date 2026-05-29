@@ -12,14 +12,14 @@ from app.core.database import create_db_and_tables
 from app.core.seed import seed_data
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from seed import seed_productos
+
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
     seed_data()
-    # seed_productos()
+
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -28,6 +28,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "http://localhost:5174",
+
     ],
     allow_credentials=True,
     allow_methods=["*"],

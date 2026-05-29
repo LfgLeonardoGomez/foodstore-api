@@ -14,16 +14,7 @@ from app.usuarios.model import Usuario
 
 class PedidoService:
 
-# class PedidoBase(SQLModel):
-#     usuario_id: int
-#     direccion_id: int
-#     forma_pago_codigo: str
-#     descuento: Decimal
-#     notas: str | None = None
 
-# class PedidoCreate(PedidoBase):
-#     detalles: list[DetallePedidoCreate]
-  
 
     def crear_pedido(self,usuario_id: int, pedido: PedidoCreate) -> PedidoRead:
         with UnitOfWork() as uow:

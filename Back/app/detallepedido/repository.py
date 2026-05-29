@@ -1,5 +1,5 @@
 
-from sqlalchemy import select
+from sqlmodel import select
 
 from app.detallepedido.model import DetallePedido
 from app.detallepedido.schema import DetallePedidoCreate, DetallePedidoList, DetallePedidoPublic

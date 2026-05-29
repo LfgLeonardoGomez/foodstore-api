@@ -21,7 +21,7 @@ class IngredienteSimple(SQLModel):
 
 class RolSimple(SQLModel):
     codigo: str
-    model_config = {"from_attribute": True}
+    model_config = {"from_attributes": True}
 
 class UsuarioSimple(SQLModel):
     id: int
