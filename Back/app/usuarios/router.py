@@ -44,7 +44,7 @@ def logout(response: Response):
         key="access_token",
         httponly=True,
         samesite="lax",
-        secure=True,
+        secure=False,
     )
     return {"mensaje": "Sesión cerrada exitosamente"}
 
