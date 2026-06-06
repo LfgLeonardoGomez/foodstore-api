@@ -8,8 +8,8 @@ TRANSICIONES_VALIDAS: dict[str | None, list[str]] = {
     None:          ["PENDIENTE"],
     "PENDIENTE":   ["CONFIRMADO", "CANCELADO"],
     "CONFIRMADO":  ["EN_PREP", "CANCELADO"],
-    "EN_PREP":     ["EN_CAMINO", "CANCELADO"],
-    "EN_CAMINO":   ["ENTREGADO"],
+    "EN_PREP":     ["LISTO", "CANCELADO"],
+    "LISTO":       ["ENTREGADO"],
     "ENTREGADO":   [],
     "CANCELADO":   [],
 }

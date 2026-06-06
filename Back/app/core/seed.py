@@ -69,8 +69,8 @@ ESTADOS_PEDIDO_BASE = [
         "es_terminal": False,
     },
     {
-        "codigo": "EN_CAMINO",
-        "descripcion": "Pedido en camino al cliente",
+        "codigo": "LISTO",
+        "descripcion": "Pedido listo para retirar o entregar",
         "orden": 4,
         "es_terminal": False,
     },
