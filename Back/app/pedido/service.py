@@ -70,7 +70,7 @@ EVENTOS_WS = {
 ROLES_POR_TRANSICION = {
     "pendiente":  ["pedidos", "admin"],
     "confirmado": ["pedidos", "cocina", "admin"],
-    "preparando": ["cocina", "pedidos", "admin"],
+    "en_prep": ["cocina", "pedidos", "admin"],
     "listo":      ["pedidos", "admin"],   # Cajero recibe aviso para entregar
     "entregado":  ["pedidos", "admin"],
     "cancelado":  ["pedidos", "cocina", "admin"],

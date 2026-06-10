@@ -11,22 +11,22 @@ from app.usuarios.model import Usuario
 TRANSICIONES_VALIDAS: dict[str, dict[str, set[str]]] = {
     "ADMIN": {
         "PENDIENTE": {"CONFIRMADO", "CANCELADO"},
-        "CONFIRMADO": {"PREPARANDO", "CANCELADO"},
-        "PREPARANDO": {"LISTO", "CANCELADO"},
+        "CONFIRMADO": {"EN_PREP", "CANCELADO"},
+        "EN_PREP": {"LISTO", "CANCELADO"},
         "LISTO": {"ENTREGADO", "CANCELADO"},
         "ENTREGADO": set(),
         "CANCELADO": set(),
     },
     "PEDIDOS": {
         "PENDIENTE": {"CONFIRMADO", "CANCELADO"},
-        "CONFIRMADO": {"PREPARANDO", "CANCELADO"},
-        "PREPARANDO": set(),
+        "CONFIRMADO": {"EN_PREP", "CANCELADO"},
+        "EN_PREP": set(),
         "LISTO": {"ENTREGADO"},
         "ENTREGADO": set(),
         "CANCELADO": set(),
     },
     "COCINA": {
-        "PREPARANDO": {"LISTO"},
+        "EN_PREP": {"LISTO"},
     },
 }
 
