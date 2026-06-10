@@ -4,13 +4,15 @@
 
 from decimal import Decimal
 
-from fastapi import HTTPException, logger, status
-
+from fastapi import HTTPException, status
+import logging
 from app.core.uow import UnitOfWork
 from app.historialestadopedido.model import HistorialEstadoPedido
 from app.pedido.schema import PedidoCreate, PedidoList, PedidoPublic, PedidoRead
 from app.usuarios.model import Usuario
 
+# Para que el logger en _emit_ws_events funcione
+logger = logging.getLogger(__name__)
 # =============================================================================
 # NORMALIZACIÓN DE ESTADOS
 # =============================================================================
@@ -61,7 +63,7 @@ ESTADOS = {
 EVENTOS_WS = {
     "pendiente":  "NUEVO_PEDIDO",
     "confirmado": "PEDIDO_CONFIRMADO",
-    "preparando": "PEDIDO_EN_PREPARACION",
+    "en_prep": "PEDIDO_EN_PREPARACION",
     "listo":      "PEDIDO_LISTO",
     "cancelado":  "PEDIDO_CANCELADO",
     "entregado":  "PEDIDO_ENTREGADO",
@@ -287,7 +289,7 @@ class PedidoService:
             return
 
         # Serializar el pedido a diccionario para enviar como JSON
-        data = result.model_dump()
+        data = result.model_dump( mode= 'json')
 
         # ─── NOTIFICAR AL CLIENTE (room del pedido) ──────────────────────────
         # El cliente que hizo el pedido siempre recibe la actualización,

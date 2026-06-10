@@ -43,7 +43,8 @@ async def crear_pedido(
     usuario: Annotated[Usuario, Depends(get_current_active_user)]
 ):
     result = service.crear_pedido(usuario.id, pedido)
-    data = result.model_dump()
+    #  mode = json le dice a pydantic que convierta todo a tipso que JSON entiende
+    data = result.model_dump(mode = 'json')
     await manager.broadcast_to_roles(["pedidos", "admin"], "NUEVO_PEDIDO", data)
     await manager.broadcast_to_order(result.id, "NUEVO_PEDIDO", data)
 
