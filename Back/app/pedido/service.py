@@ -371,6 +371,17 @@ class PedidoService:
             # Delegar a la FSM del modelo
             estado_desde = pedido.cambiar_estado(nuevo_estado, user_roles, motivo)
 
+            # Si el pedido se cancela, y el estado es pendiente o confirmado,
+            # se recupera el stock
+
+            if pedido.estado_codigo == "CANCELADO" and estado_desde in ("PENDIENTE", "CONFIRMADO"):
+                for detalle in pedido.detalles:
+                    producto = uow.productos.get_by_id(detalle.producto_id)
+                    if producto:
+                        producto.stock_cantidad += detalle.cantidad
+                        uow.productos.update(producto)
+
+                        
             # Registrar historial
             uow.historialestadopedido.create(
                 HistorialEstadoPedido(
