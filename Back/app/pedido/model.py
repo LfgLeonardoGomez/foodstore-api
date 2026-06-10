@@ -26,6 +26,7 @@ TRANSICIONES_VALIDAS: dict[str, dict[str, set[str]]] = {
         "CANCELADO": set(),
     },
     "COCINA": {
+        "CONFIRMADO": {"EN_PREP"},
         "EN_PREP": {"LISTO"},
     },
 }
