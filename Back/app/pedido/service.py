@@ -129,6 +129,22 @@ class PedidoService:
             })
 
             for detalle in pedido.detalles:
+                producto = uow.productos.get_by_id(detalle.producto_id)
+                if not producto:
+                    raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Producto con id {detalle.producto_id} no encontrado",
+    )
+                
+                if (producto.stock_cantidad < detalle.cantidad):
+                    raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="La cantidad excede el stock disponible",
+                )
+                
+                producto.stock_cantidad -= detalle.cantidad
+                uow.productos.update(producto)
+                
                 detalle_data = detalle.model_dump()
                 detalle_data["pedido_id"] = pedido_db.id
                 detalle_data["subtotal_snapshot"] = detalle_data["precio_snapshot"] * detalle_data["cantidad"]
