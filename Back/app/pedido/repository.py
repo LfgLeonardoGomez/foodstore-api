@@ -20,7 +20,7 @@ class PedidoRepository:
         return self.session.exec(statement).all()
     
     def get_by_usuario_id(self, usuario_id: int, offset: int = 0, limit: int = 100) -> list[Pedido]:
-        statement = select(Pedido).where(Pedido.usuario_id == usuario_id).offset(offset).limit(limit)
+        statement = select(Pedido).where(Pedido.usuario_id == usuario_id).order_by(Pedido.id.desc()).offset(offset).limit(limit)
         return self.session.exec(statement).all()
     
     def get_by_estado(self, estado_codigo: str, offset: int = 0, limit: int = 100) -> list[Pedido]:
