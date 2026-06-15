@@ -9,6 +9,7 @@ from app.direccioentrega.router import router as direccionentrega_router
 from app.detallepedido.router import router as detalle_pedido_router
 from app.pedido.router import router as pedido_router
 from app.modules.uploads.router import router as uploads_router
+from app.pago.router import router as pagos_router
 from app.core.database import create_db_and_tables
 from app.core.seed import seed_data
 from contextlib import asynccontextmanager
@@ -45,6 +46,7 @@ app.include_router(direccionentrega_router)
 app.include_router(detalle_pedido_router)
 app.include_router(pedido_router)
 app.include_router(uploads_router)
+app.include_router(pagos_router)
 
 # ─── Favicon ──────────────────────────────────────────────────────────────────
 # Evita el error 404 en navegadores que piden /favicon.ico automáticamente.

@@ -14,6 +14,11 @@ class Settings(BaseSettings):
         "env_file_encoding": "utf-8",
         "extra":             "ignore",   # ignora vars extra del .env (ej. DATABASE_URL literal)
     }
+# ___Mercado Pago __________________________________
+    MP_ACCESS_TOKEN: str = ""          # Obligatorio para pagos. Sandbox o prod.
+    MP_PUBLIC_KEY: str = ""            # Para el frontend (Checkout Pro).
+    NGROK_URL: str = ""                # Tunel público para webhooks en dev.
+    VITE_FRONTEND_URL: str = "http://localhost:5173"  # URL del frontend React.
 
 # ___ CLOUDINARY _____
 
@@ -21,4 +26,6 @@ class Settings(BaseSettings):
     cloudinary_api_key:    str = ""
     cloudinary_api_secret: str = ""
     
+
+
 settings = Settings()

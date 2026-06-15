@@ -34,7 +34,7 @@ def login(
                         httponly=True, 
                         max_age=token.expires_in,
                         samesite="lax",
-                        secure=True)
+                        secure=False)
     return {"mensaje": "Inicio de sesión exitoso"}
 
 @router.post("/logout", status_code=status.HTTP_200_OK)

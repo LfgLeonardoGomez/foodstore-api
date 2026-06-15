@@ -10,6 +10,7 @@ from app.formadepago.repository import FormaDePagoRepository
 from app.historialestadopedido.model import HistorialEstadoPedido
 from app.historialestadopedido.repository import HistorialEstadoPedidoRepository
 from app.ingrediente.repository import IngredienteRepository
+from app.pago.repository import PagoRepository
 from app.pedido.repository import PedidoRepository
 from app.producto.repository import ProductoRepository
 from app.rol.repository import RolRepository
@@ -32,6 +33,7 @@ class UnitOfWork:
         self.formas_pago = FormaDePagoRepository(self.session)
         self.estadopedido = EstadoPedidoRepository(self.session)
         self.historialestadopedido = HistorialEstadoPedidoRepository(self.session)
+        self.pagos = PagoRepository(self.session)
         
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
