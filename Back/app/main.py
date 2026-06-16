@@ -7,6 +7,7 @@ from app.core.limiter import limiter
 from app.modules.categoria.router import router as categoria_router
 from app.modules.producto.router import router as producto_router
 from app.modules.ingrediente.router import router as ingrediente_router
+from app.modules.auth.router import router as auth_router
 from app.modules.usuarios.router import router as usuario_router
 from app.modules.direccioentrega.router import router as direccionentrega_router
 from app.detallepedido.router import router as detalle_pedido_router
@@ -47,6 +48,7 @@ app.add_middleware(
 app.include_router(categoria_router)
 app.include_router(producto_router)
 app.include_router(ingrediente_router)
+app.include_router(auth_router)
 app.include_router(usuario_router)
 app.include_router(direccionentrega_router)
 app.include_router(detalle_pedido_router)

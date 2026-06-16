@@ -1,73 +1,20 @@
 from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, Request, Response, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, status
 
-from app.core.limiter import limiter
 from app.core.deps import get_current_active_user, require_role
-from app.core.uow import UnitOfWork, get_uow
 from app.modules.usuarios.model import Usuario
-from app.modules.usuarios.schemas import UsuarioCreate, UsuarioList, UsuarioPublico, UsuarioRead, UsuarioUpdate
+from app.modules.usuarios.schemas import UsuarioList, UsuarioPublico, UsuarioRead, UsuarioUpdate
 from app.modules.usuarios.service import UsuarioService
 
 
-router = APIRouter(prefix="/api/v1", tags=["auth"])
+router = APIRouter(prefix="/api/v1", tags=["usuarios"])
 
 service = UsuarioService()
 
-#-------------------------------#
-# Rutas Públicas
-#-------------------------------#
-
-@router.post("/register", response_model= UsuarioPublico, status_code= status.HTTP_201_CREATED)
-@limiter.limit("100/15minute") 
-def register(usuario: UsuarioCreate, request: Request):
-    return service.crear_usuario(usuario)
 
 
-@router.post("/login", status_code=status.HTTP_200_OK)
-@limiter.limit("100/15minute") 
-def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    request: Request,
-    response: Response
-):
-    token = service.autenticar_usuario(form_data.username, form_data.password)
-    response.set_cookie(key="access_token",
-                        value=token.access_token, 
-                        httponly=True, 
-                        max_age=token.expires_in,
-                        samesite="lax",
-                        secure=False)
-    return {"mensaje": "Inicio de sesión exitoso"}
 
-@router.post("/logout", status_code=status.HTTP_200_OK)
-def logout(response: Response):
-    # Limpiar la cookie HttpOnly al cerrar sesión
-    response.delete_cookie(
-        key="access_token",
-        httponly=True,
-        samesite="lax",
-        secure=False,
-    )
-    return {"mensaje": "Sesión cerrada exitosamente"}
-
-    #-------------------------------#
-    # Rutas Protegidas
-    #-------------------------------#
-
-@router.get("/me", response_model= UsuarioPublico)
-def read_current_user(current_user: Annotated[Usuario, 
-                        Depends(get_current_active_user)]):
-    return {
-        "id": current_user.id,
-        "nombre": current_user.nombre,
-        "apellido": current_user.apellido,
-        "email": current_user.email,
-        "celular": current_user.celular,
-        "disabled": current_user.disabled,
-        "roles": [rol.codigo for rol in current_user.roles]
-    }
 
 @router.get("/admin/usuarios", response_model = UsuarioList)
 def listar_usuarios(admin: Annotated[Usuario, Depends(require_role(["ADMIN"]))]):
