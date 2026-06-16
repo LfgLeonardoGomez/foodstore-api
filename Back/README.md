@@ -1,9 +1,9 @@
 # FoodStore — Backend API
 
-**Trabajo Práctico — Programación 4**
+**Trabajo Práctico — Programación 4**  
 **UTN — Facultad Regional Mendoza**
 
-> Parte del proyecto Food Store TPI Programación 4.
+> Parte del proyecto Food Store TPI Programación 4.  
 > Repos relacionados: [Panel Admin](https://github.com/LfgLeonardoGomez/admin-app-food-store-final-) · [Tienda Cliente](https://github.com/LfgLeonardoGomez/store-app-food-store-final)
 
 ---
@@ -68,43 +68,51 @@ El servidor se encarga de:
    ```bash
    python -m venv .venv
    .venv\Scripts\activate
+   ```
 
-2. Instalar dependencias:
+2. **Instalar dependencias:**
 
-pip install -r requirements.txt
-3. Configurar variables de entorno:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-cp .env.example .env
+3. **Configurar variables de entorno:**
 
-3. Completar .env con tus credenciales de base de datos, Cloudinary y MercadoPago.
+   ```bash
+   cp .env.example .env
+   ```
+
+   Completar `.env` con las credenciales de base de datos, Cloudinary y MercadoPago.
 
 ---
-Levantar el Servidor
 
+## Levantar el Servidor
+
+```bash
 uvicorn app.main:app --reload
+```
 
-- URL base: http://localhost:8000
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- **URL base:** `http://localhost:8000`
+- **Swagger UI:** `http://localhost:8000/docs`
+- **ReDoc:** `http://localhost:8000/redoc`
 
 Las tablas y el seed se ejecutan automáticamente al iniciar.
 
 ---
-Credenciales seed
 
-┌─────────┬───────────────────────┬─────────────┐
-│   Rol   │         Email         │ Contraseña  │
-├─────────┼───────────────────────┼─────────────┤
-│ Admin   │ admin@foodstore.com   │ admin1234   │
-├─────────┼───────────────────────┼─────────────┤
-│ Stock   │ stock@foodstore.com   │ stock1234   │
-├─────────┼───────────────────────┼─────────────┤
-│ Pedidos │ pedidos@foodstore.com │ pedidos1234 │
-└─────────┴───────────────────────┴─────────────┘
+## Credenciales seed
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@foodstore.com | admin1234 |
+| Stock | stock@foodstore.com | stock1234 |
+| Pedidos | pedidos@foodstore.com | pedidos1234 |
 
 ---
-Estructura de Módulos
 
+## Estructura de Módulos
+
+```
 app/
 ├── core/                # Configuración, BD, seed, UoW, WebSocket
 ├── modules/
@@ -118,8 +126,10 @@ app/
 │   ├── uploads/         # Upload/delete imágenes Cloudinary
 │   └── direccioentrega/ # Direcciones de entrega
 └── main.py              # Punto de entrada
+```
 
 ---
-Video de presentación
 
-[Pendiente — se actualizará antes de la entrega
+## Video de presentación
+
+[Pendiente — se actualizará antes de la entrega]
