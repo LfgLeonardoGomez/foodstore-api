@@ -13,12 +13,12 @@ from app.modules.direccioentrega.service import DireccionEntregaService
 from app.modules.usuarios.model import Usuario
 
 
-router = APIRouter(prefix="/direcciones", tags=["direcciones"])
+router = APIRouter(prefix="/api/v1/direcciones", tags=["direcciones"])
 
 service = DireccionEntregaService()
 
 
-@router.get("/", response_model=DireccionEntregaList)
+@router.get("", response_model=DireccionEntregaList)
 def listar_direcciones(
     current_user: Annotated[Usuario, Depends(get_current_active_user)],
     offset: Annotated[int, Query(ge=0)] = 0,

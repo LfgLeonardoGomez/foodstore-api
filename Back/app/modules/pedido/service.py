@@ -187,8 +187,15 @@ class PedidoService:
             
             data = uow.pedidos.get_by_usuario_id(cliente_id)
             count = len(data)
+            
+            resultado = []
+            for p in data:
+                pedido_public = PedidoPublic.model_validate(p)
+                ultimo_pago = uow.pagos.get_ultimo_by_pedido(p.id)
+                pedido_public.estado_pago = ultimo_pago.estado if ultimo_pago else "sin_pago"
+                resultado.append(pedido_public)
 
-            return PedidoList(data=[PedidoPublic.model_validate(p) for p in data], count=count)
+            return PedidoList(data=resultado, count=count)
         
         
         #  traer todos los pedidos
@@ -197,8 +204,15 @@ class PedidoService:
         with UnitOfWork() as uow:
             data = uow.pedidos.get_all()
             count = len(data)
+            
+            resultado = []
+            for p in data:
+                pedido_public = PedidoPublic.model_validate(p)
+                ultimo_pago = uow.pagos.get_ultimo_by_pedido(p.id)
+                pedido_public.estado_pago = ultimo_pago.estado if ultimo_pago else "sin_pago"
+                resultado.append(pedido_public)
 
-            return PedidoList(data=[PedidoPublic.model_validate(p) for p in data], count=count)
+            return PedidoList(data=resultado, count=count)
 
         #  traer pedidos por estado
 
@@ -212,8 +226,15 @@ class PedidoService:
                 )
             data = uow.pedidos.get_by_estado(estado_codigo)
             count = len(data)
+            
+            resultado = []
+            for p in data:
+                pedido_public = PedidoPublic.model_validate(p)
+                ultimo_pago = uow.pagos.get_ultimo_by_pedido(p.id)
+                pedido_public.estado_pago = ultimo_pago.estado if ultimo_pago else "sin_pago"
+                resultado.append(pedido_public)
 
-            return PedidoList(data=[PedidoPublic.model_validate(p) for p in data], count=count)
+            return PedidoList(data=resultado, count=count)
     
         #  traer pedidos de un cliente por estado,
 
@@ -233,8 +254,15 @@ class PedidoService:
                 )
             data = uow.pedidos.get_by_estado_by_usuario_id(cliente_id, estado_codigo)
             count = len(data)
+            
+            resultado = []
+            for p in data:
+                pedido_public = PedidoPublic.model_validate(p)
+                ultimo_pago = uow.pagos.get_ultimo_by_pedido(p.id)
+                pedido_public.estado_pago = ultimo_pago.estado if ultimo_pago else "sin_pago"
+                resultado.append(pedido_public)
 
-            return PedidoList(data=[PedidoPublic.model_validate(p) for p in data], count=count)
+            return PedidoList(data=resultado, count=count)
 
 
         #  traer un pedido por id. 
@@ -242,6 +270,8 @@ class PedidoService:
     def traer_pedido_por_id(self, pedido_id: int, usuario: Usuario) -> PedidoRead:
         with UnitOfWork() as uow:
             pedido = uow.pedidos.get_by_id(pedido_id)
+            ultimo_pago = uow.pagos.get_ultimo_by_pedido(pedido_id)
+
             if not pedido:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
@@ -254,7 +284,13 @@ class PedidoService:
                     detail="No tenés permiso para ver este pedido.",
                 )
         
-            return PedidoRead.model_validate(pedido)
+            respuesta = PedidoPublic.model_validate(pedido)
+            if ultimo_pago:
+                respuesta.estado_pago = ultimo_pago.estado 
+            else:
+                respuesta.estado_pago = "sin_pago"
+        
+        return respuesta
         
     def list_cocina_pedidos(self)-> list[PedidoPublic]:
         with UnitOfWork() as uow:
@@ -264,7 +300,13 @@ class PedidoService:
                 if p.estado_codigo.upper() in ("CONFIRMADO", "PREPARANDO", "EN_PREP", "EN_PREPARACION")
             ]
             pedidos_cocina.sort(key=lambda p:p.id or 0)
-            result = [PedidoPublic.model_validate(p) for p in pedidos_cocina]
+            
+            result = []
+            for p in pedidos_cocina:
+                pedido_public = PedidoPublic.model_validate(p)
+                ultimo_pago = uow.pagos.get_ultimo_by_pedido(p.id)
+                pedido_public.estado_pago = ultimo_pago.estado if ultimo_pago else "sin_pago"
+                result.append(pedido_public)
 
         return result
 

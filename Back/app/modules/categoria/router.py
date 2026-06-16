@@ -4,9 +4,9 @@ from app.modules.categoria.service import categoria_service
 
 from app.modules.categoria.schema import CategoriaCreate, CategoriaList, CategoriaRead, CategoriaResponse, CategoriaUpdate
 
-router = APIRouter(prefix="/categorias", tags=["categorias"])
+router = APIRouter(prefix="/api/v1/categorias", tags=["categorias"])
 
-@router.get("/", response_model=CategoriaList)
+@router.get("", response_model=CategoriaList)
 def listar_categorias(
     offset: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 100
@@ -17,7 +17,7 @@ def listar_categorias(
 def get_categoria(categoria_id: int):
     return categoria_service.obtener_categoria_por_id(categoria_id)
 
-@router.post("/", response_model=CategoriaRead, status_code=status.HTTP_201_CREATED )
+@router.post("", response_model=CategoriaRead, status_code=status.HTTP_201_CREATED )
 def crear_categoria(categoria: CategoriaCreate):
     return categoria_service.crear_categoria(categoria)
 

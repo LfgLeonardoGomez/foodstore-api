@@ -20,7 +20,7 @@ class ProductoUpdate(SQLModel):
     precio_base: Optional[str] = Field(default=None, min_length=1, max_length=50)
     imagen_url: Optional[str] = Field(default=None)
     stock_cantidad: Optional[int] = Field(default=0, ge=0)
-    unidad_de_medida: Optional[int]
+    unidad_de_medida: Optional[int] = None
     disponible: Optional[bool] = None
 
 class ProductoCategoriasUpdate(SQLModel):

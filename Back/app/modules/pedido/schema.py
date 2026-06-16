@@ -3,6 +3,7 @@
 
 
 from decimal import Decimal
+from typing import Optional
 
 
 from sqlmodel import Field, SQLModel
@@ -28,7 +29,7 @@ class PedidoPublic(PedidoBase):
     subtotal: Decimal
     costo_envio: Decimal
     total: Decimal
-
+    estado_pago: Optional[str] = None 
     model_config = {"from_attributes": True}
 
 class PedidoRead(PedidoPublic):

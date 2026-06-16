@@ -3,9 +3,9 @@ from fastapi import HTTPException, Query, status, APIRouter
 from app.modules.ingrediente.service import IngredienteService
 from app.modules.ingrediente.schema import IngredienteCreate, IngredienteList, IngredienteRead, IngredienteResponse, IngredienteUpdate
 
-router = APIRouter(prefix="/ingredientes", tags=["ingredientes"])
+router = APIRouter(prefix="/api/v1/ingredientes", tags=["ingredientes"])
 
-@router.get("/", response_model=IngredienteList)
+@router.get("", response_model=IngredienteList)
 def listar_ingredientes(
     offset: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 100
@@ -16,7 +16,7 @@ def listar_ingredientes(
 def get_ingrediente(ingrediente_id: int):
     return IngredienteService().obtener_ingrediente_por_id(ingrediente_id)
 
-@router.post("/", response_model=IngredienteRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=IngredienteRead, status_code=status.HTTP_201_CREATED)
 def crear_ingrediente(ingrediente: IngredienteCreate):  
     return IngredienteService().crear_ingrediente(ingrediente)
 

@@ -19,7 +19,7 @@ from fastapi import Depends, Response, status
 from app.modules.usuarios.model import Usuario
 from app.modules.usuarios.schemas import UsuarioPublico
 
-router = APIRouter(prefix="/pedidos", tags=["Pedidos"])
+router = APIRouter(prefix="/api/v1/pedidos", tags=["Pedidos"])
 
 # Roles autorizados para acceder a los endpoints de cocina/KDS
 # Se incluyen variaciones en mayúsculas para robustez en comparación
@@ -37,7 +37,7 @@ def get_pedido_service() -> PedidoService:
 
 # crear
 
-@router.post("/", response_model = PedidoRead, status_code= status.HTTP_201_CREATED)
+@router.post("", response_model = PedidoRead, status_code= status.HTTP_201_CREATED)
 async def crear_pedido(
     pedido: PedidoCreate,
     usuario: Annotated[Usuario, Depends(get_current_active_user)]
@@ -62,7 +62,7 @@ def traer_pedidos_por_cliente(
 
 # traer todos los pedidos - solo admin
 
-@router.get("/", response_model = PedidoList, status_code = status.HTTP_200_OK)
+@router.get("", response_model = PedidoList, status_code = status.HTTP_200_OK)
 def traer_todos(admin: Annotated[Usuario, Depends(require_role(["ADMIN", "PEDIDOS"]))]):
     return service.traer_todos_los_pedidos()
 

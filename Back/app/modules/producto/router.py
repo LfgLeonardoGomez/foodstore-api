@@ -4,9 +4,9 @@ from app.modules.producto.service import ProductoService
 from app.core.deps import require_role
 from app.modules.producto.schema import ProductoCategoriasUpdate, ProductoCreate, ProductoIngredientesUpdate, ProductoList, ProductoRead, ProductoResponse, ProductoStockUpdate, ProductoUpdate
 
-router = APIRouter(prefix="/productos", tags=["productos"])
+router = APIRouter(prefix="/api/v1/productos", tags=["productos"])
 
-@router.get("/", response_model=ProductoList)
+@router.get("", response_model=ProductoList)
 def listar_productos(
     offset: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(ge=1, le=100)] = 100
@@ -17,7 +17,7 @@ def listar_productos(
 def get_producto(producto_id: int):
     return ProductoService().obtener_producto_por_id(producto_id)
 
-@router.post("/", response_model=ProductoRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ProductoRead, status_code=status.HTTP_201_CREATED)
 def crear_producto(producto: ProductoCreate):  
     return ProductoService().crear_producto(producto)
 

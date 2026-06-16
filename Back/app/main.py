@@ -45,11 +45,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
+app.include_router(usuario_router)
 app.include_router(categoria_router)
 app.include_router(producto_router)
 app.include_router(ingrediente_router)
-app.include_router(auth_router)
-app.include_router(usuario_router)
 app.include_router(direccionentrega_router)
 app.include_router(detalle_pedido_router)
 app.include_router(pedido_router)
