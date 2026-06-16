@@ -23,5 +23,6 @@ class Producto(AuditMixin, table=True):
                 link_model=ProductoCategoria)
     
     ingredientes: list["Ingrediente"] = Relationship(back_populates="productos",
-                link_model=ProductoIngrediente
-)
+                link_model=ProductoIngrediente)
+    
+    unidad_medida_id: Optional[int] = Field(default=None, foreign_key="unidades_medida.id")

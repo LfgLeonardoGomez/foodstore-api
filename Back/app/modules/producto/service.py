@@ -21,6 +21,7 @@ class ProductoService:
                 producto_existente.precio_base = producto.precio_base
                 producto_existente.imagen_url = producto.imagen_url
                 producto_existente.stock_cantidad = producto.stock_cantidad
+                producto_existente.unidad_medida_id = producto.unidad_medida_id
                 producto_existente.disponible = True
                 print("Actualizando producto existente:")
                 uow.productos.update(producto_existente)

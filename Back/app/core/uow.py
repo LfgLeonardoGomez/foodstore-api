@@ -15,6 +15,7 @@ from app.modules.pedido.repository import PedidoRepository
 from app.modules.producto.repository import ProductoRepository
 from app.rol.repository import RolRepository
 from app.modules.usuarios.repository import UsuarioRepository
+from app.unidadMedida.repository import UnidadMedidaRepository
 
 class UnitOfWork:
     def __init__(self):
@@ -34,7 +35,7 @@ class UnitOfWork:
         self.estadopedido = EstadoPedidoRepository(self.session)
         self.historialestadopedido = HistorialEstadoPedidoRepository(self.session)
         self.pagos = PagoRepository(self.session)
-        
+        self.unidades_medida = UnidadMedidaRepository(self.session) 
         # Aquí irían más repositorios: self.productos = ProductoRepository(...)
         return self
 

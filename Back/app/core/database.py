@@ -10,6 +10,7 @@ from app.modules.producto.model import Producto
 from app.core.models import ProductoCategoria
 from app.modules.pago.model import Pago
 from app.formadepago.model import FormaDePago
+from app.unidadMedida.model import UnidadMedida
 
 # Cargar variables de entorno
 load_dotenv()

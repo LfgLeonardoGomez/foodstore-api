@@ -4,7 +4,7 @@ from app.rol.model import Rol
 from app.modules.usuarios.model import Usuario
 from app.formadepago.model import FormaDePago
 from app.estadopedido.model import EstadoPedido
-
+from app.unidadMedida.model import UnidadMedida
 
 ROLES_BASE = [
     {
@@ -88,6 +88,38 @@ ESTADOS_PEDIDO_BASE = [
     },
 ]
 
+UNIDADES_MEDIDA_BASE = [
+    {
+        "nombre": "Kilogramo",
+        "simbolo": "kg",
+        "tipo": "peso",
+    },
+    {
+        "nombre": "Gramo",
+        "simbolo": "gr",
+        "tipo": "peso",
+    },
+    {
+        "nombre": "Litro",
+        "simbolo": "lt",
+        "tipo": "volumen",
+    },
+    {
+        "nombre": "Mililitro",
+        "simbolo": "ml",
+        "tipo": "volumen",
+    },
+    {
+        "nombre": "Unidad",
+        "simbolo": "un",
+        "tipo": "unidad",
+    },
+    {
+        "nombre": "Docena",
+        "simbolo": "doc",
+        "tipo": "unidad",
+    },
+]
 
 def seed_roles() -> None:
     with UnitOfWork() as uow:
@@ -140,6 +172,19 @@ def seed_estados_pedido() -> None:
 
             uow.session.add(estado)
 
+def seed_unidades_medida() -> None:
+    with UnitOfWork() as uow:
+        for um_data in UNIDADES_MEDIDA_BASE:
+            um_existente = uow.unidades_medida.get_by_nombre(um_data["nombre"])
+            if um_existente:
+                continue
+
+            um = UnidadMedida(
+                nombre=um_data["nombre"],
+                simbolo=um_data["simbolo"],
+                tipo=um_data["tipo"],
+            )
+            uow.session.add(um)
 
 def seed_admin() -> None:
     with UnitOfWork() as uow:
@@ -210,5 +255,6 @@ def seed_data() -> None:
     seed_roles()
     seed_formas_pago()
     seed_estados_pedido()
+    seed_unidades_medida()
     seed_admin()
     seed_test_users()

@@ -21,8 +21,9 @@ class ProductoIngrediente(SQLModel, table=True):
     
     producto_id: int = Field(foreign_key="productos.id", primary_key=True)
     ingrediente_id: int = Field(foreign_key="ingredientes.id", primary_key=True)
-
-
+    cantidad: float = Field(nullable=False, gt=0)
+    unidad_medida_id: int = Field(foreign_key="unidades_medida.id", nullable=False)
+    es_removible: bool = Field(default=False, nullable=False)
 class UsuarioRol(AuditMixin, SQLModel, table=True):
     __tablename__ = "usuario_rol"
     usuario_id : int = Field (foreign_key="usuarios.id", primary_key=True)
