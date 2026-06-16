@@ -5,7 +5,8 @@ from app.core.simple_schemas import ProductoSimple
 class CategoriaBase(SQLModel):
     nombre: str = Field(min_length=3, max_length=100)
     descripcion: Optional[str] = Field(min_length=3, max_length=250)
-
+    imagen_url: Optional[str] = Field(default=None)
+    
 class CategoriaCreate(CategoriaBase):
     categoria_padre_id: Optional[int] = None
 

@@ -15,6 +15,7 @@ class Categoria(AuditMixin, table = True):
     nombre: str = Field (min_length=1, max_length=100, index=True, nullable=False)
     descripcion: Optional[str] = Field (default=None, max_length=255)
     disponible: bool = Field (default=True)
+    imagen_url: Optional[str] = Field(default=None, max_length=500)
     categoria_padre_id: Optional[int] = Field(default=None, foreign_key="categorias.id")
 
     categoria_padre: Optional["Categoria"] = Relationship(
