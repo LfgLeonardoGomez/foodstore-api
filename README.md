@@ -132,4 +132,4 @@ app/
 
 ## Video de presentación
 
-[Pendiente — se actualizará antes de la entrega]
+[Video](https://youtu.be/SkHezWvJIcg)
