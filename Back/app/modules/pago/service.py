@@ -39,11 +39,11 @@ class PagoService:
                     detail="MercadoPago no configurado. Configure MP_ACCESS_TOKEN"
                 )
             
-            ngrok_url = settings.NGROK_URL or "http://localhost:8000"
+            base_url = settings.NGROK_URL or "http://localhost:8000"
             back_urls = {
-                "success": f"{ngrok_url}/pagos/redirect/{pedido_id}/success",
-                "failure": f"{ngrok_url}/pagos/redirect/{pedido_id}/failure",
-                "pending": f"{ngrok_url}/pagos/redirect/{pedido_id}/pending"
+                "success": f"{base_url}/api/v1/pagos/redirect/{pedido_id}/success",
+                "failure": f"{base_url}/api/v1/pagos/redirect/{pedido_id}/failure",
+                "pending": f"{base_url}/api/v1/pagos/redirect/{pedido_id}/pending"
             }
 
             try:

@@ -35,8 +35,7 @@ def get_direccion(
     return service.get_by_id(current_user.id, direccion_id)
 
 
-@router.post(
-    "/",
+@router.post("",
     status_code=status.HTTP_201_CREATED,
     response_model=DireccionEntregaRead,
 )

@@ -1,6 +1,9 @@
 
-from fastapi import FastAPI, Response
-from fastapi.responses import RedirectResponse
+import logging
+import time
+
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import JSONResponse, RedirectResponse
 from slowapi.errors import RateLimitExceeded
 from slowapi import _rate_limit_exceeded_handler
 from app.core.limiter import limiter
@@ -19,7 +22,8 @@ from app.core.seed import seed_data
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-
+# Logger compartido con Uvicorn para que los logs se vean en la misma salida
+logger = logging.getLogger("uvicorn.error")
 
 
 @asynccontextmanager
@@ -32,6 +36,36 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ─── Exception Handler Global ─────────────────────────────────────────────────
+# Captura cualquier excepción no manejada (500) y responde con JSON limpio.
+# Evita que el cliente vea stack traces feos del servidor.
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(
+        f"ERROR 500 en {request.method} {request.url.path}: {exc}",
+        exc_info=True
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "message": "Ocurrió un error inesperado en el servidor",
+            "path": request.url.path
+        }
+    )
+
+# ─── Middleware de Logging y Timing ───────────────────────────────────────────
+# Loguea cada request con su método, path, status code y tiempo de ejecución.
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response: Response = await call_next(request)
+    process_time = time.time() - start_time
+    logger.info(
+        f"{request.method} {request.url.path} - {response.status_code} - {process_time:.3f}s"
+    )
+    return response
 
 app.add_middleware(
     CORSMiddleware,

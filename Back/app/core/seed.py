@@ -5,6 +5,8 @@ from app.modules.usuarios.model import Usuario
 from app.formadepago.model import FormaDePago
 from app.estadopedido.model import EstadoPedido
 from app.unidadMedida.model import UnidadMedida
+from app.modules.categoria.model import Categoria
+from app.modules.producto.model import Producto
 
 ROLES_BASE = [
     {
@@ -251,6 +253,121 @@ def seed_test_users() -> None:
             )
             uow.session.add(nuevo)
 
+
+# ─── CATEGORÍAS ──────────────────────────────────────────────────────────────
+# Imágenes de Unsplash (libres de uso, hotlinking permitido)
+
+CATEGORIAS_BASE = [
+    {
+        "nombre": "Pizzas",
+        "descripcion": "Pizzas artesanales al horno de barro",
+        "imagen_url": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80",
+    },
+    {
+        "nombre": "Hamburguesas",
+        "descripcion": "Hamburguesas gourmet con carne 100% vacuna",
+        "imagen_url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80",
+    },
+    {
+        "nombre": "Empanadas",
+        "descripcion": "Empanadas criollas horneadas y fritas",
+        "imagen_url": "https://images.unsplash.com/photo-1530469940413-339b7f070deb?w=600&q=80",
+    },
+    {
+        "nombre": "Bebidas",
+        "descripcion": "Gaseosas, jugos y bebidas sin alcohol",
+        "imagen_url": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80",
+    },
+]
+
+
+def seed_categorias() -> None:
+    with UnitOfWork() as uow:
+        for cat_data in CATEGORIAS_BASE:
+            if uow.categorias.get_by_nombre(cat_data["nombre"]):
+                continue
+
+            categoria = Categoria(
+                nombre=cat_data["nombre"],
+                descripcion=cat_data["descripcion"],
+                disponible=True,
+                imagen_url=cat_data["imagen_url"],
+            )
+            uow.session.add(categoria)
+
+
+# ─── PRODUCTOS ───────────────────────────────────────────────────────────────
+# Imágenes de Unsplash (libres de uso, hotlinking permitido)
+
+PRODUCTOS_BASE = [
+    {
+        "nombre": "Pizza Mozzarella",
+        "descripcion": "Salsa de tomate, mozzarella fresca y orégano",
+        "precio_base": "12000.00",
+        "stock_cantidad": 50,
+        "imagen_url": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80",
+        "categorias": ["Pizzas"],
+    },
+    {
+        "nombre": "Pizza Pepperoni",
+        "descripcion": "Salsa de tomate, mozzarella y pepperoni extra",
+        "precio_base": "14500.00",
+        "stock_cantidad": 40,
+        "imagen_url": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&q=80",
+        "categorias": ["Pizzas"],
+    },
+    {
+        "nombre": "Hamburguesa Clásica",
+        "descripcion": "Carne 200g, lechuga, tomate, queso cheddar y mayonesa casera",
+        "precio_base": "8500.00",
+        "stock_cantidad": 60,
+        "imagen_url": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=80",
+        "categorias": ["Hamburguesas"],
+    },
+    {
+        "nombre": "Empanada de Carne",
+        "descripcion": "Carne picada, cebolla, huevo duro y aceitunas",
+        "precio_base": "1800.00",
+        "stock_cantidad": 100,
+        "imagen_url": "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80",
+        "categorias": ["Empanadas"],
+    },
+    {
+        "nombre": "Coca Cola 500ml",
+        "descripcion": "Gaseosa Coca Cola individual 500ml",
+        "precio_base": "2500.00",
+        "stock_cantidad": 200,
+        "imagen_url": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80",
+        "categorias": ["Bebidas"],
+    },
+]
+
+
+def seed_productos() -> None:
+    with UnitOfWork() as uow:
+        for prod_data in PRODUCTOS_BASE:
+            if uow.productos.get_by_nombre(prod_data["nombre"]):
+                continue
+
+            # Buscar las categorías por nombre
+            categorias_obj = []
+            for cat_nombre in prod_data["categorias"]:
+                cat = uow.categorias.get_by_nombre(cat_nombre)
+                if cat:
+                    categorias_obj.append(cat)
+
+            producto = Producto(
+                nombre=prod_data["nombre"],
+                descripcion=prod_data["descripcion"],
+                precio_base=prod_data["precio_base"],
+                stock_cantidad=prod_data["stock_cantidad"],
+                disponible=True,
+                imagen_url=prod_data["imagen_url"],
+                categorias=categorias_obj,
+            )
+            uow.session.add(producto)
+
+
 def seed_data() -> None:
     seed_roles()
     seed_formas_pago()
@@ -258,3 +375,5 @@ def seed_data() -> None:
     seed_unidades_medida()
     seed_admin()
     seed_test_users()
+    seed_categorias()
+    seed_productos()
